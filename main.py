@@ -27,14 +27,8 @@ print("GEMINI_API_KEY loaded:", "YES" if api_key else "NO")
 
 genai.configure(api_key=api_key)
 
-# Use safer model name format
+# Current model (will fix after we see available ones)
 gemini = genai.GenerativeModel("models/gemini-1.0-pro")
-
-# Optional: list available models (uncomment for debugging)
-"""
-for m in genai.list_models():
-    print(m.name)
-"""
 
 app = FastAPI()
 
@@ -61,7 +55,6 @@ def predict(planet: PlanetInput):
 
     esi = round(float(model.predict(input_df)[0]), 4)
 
-    # Make sure prompt is not empty
     prompt = f"""
     You are an astrophysics expert.
 
@@ -72,10 +65,19 @@ def predict(planet: PlanetInput):
     Keep it concise and engaging.
     """
 
+    # ✅ NEW: Fetch available Gemini models
+    available_models = []
+    try:
+        for m in genai.list_models():
+            if hasattr(m, "supported_generation_methods") and "generateContent" in m.supported_generation_methods:
+                available_models.append(m.name)
+    except Exception as e:
+        available_models.append(f"Error fetching models: {str(e)}")
+
+    # Gemini call
     try:
         response = gemini.generate_content(prompt)
 
-        # Safer extraction of text
         if hasattr(response, "text") and response.text:
             insight = response.text
         else:
@@ -91,7 +93,8 @@ def predict(planet: PlanetInput):
         "esi": esi,
         "tier": tier,
         "color": color,
-        "insight": insight
+        "insight": insight,
+        "available_models": available_models  # 👈 THIS IS THE KEY ADDITION
     }
 
 def classify(esi):
