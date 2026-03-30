@@ -611,6 +611,7 @@ body::after {
 /* Done inline in SVG */
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -887,7 +888,7 @@ function renderResult(data, inputs) {
   }
 
   // Analysis
-  document.getElementById('analysisText').textContent = data.insight || '—';
+  document.getElementById('analysisText').innerHTML = marked.parse(data.insight || '—');
   document.getElementById('cardId').textContent = 'REF: ' + Date.now().toString(36).toUpperCase().slice(-6);
 
   // Chips
