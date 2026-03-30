@@ -28,7 +28,7 @@ print("GEMINI_API_KEY loaded:", "YES" if api_key else "NO")
 genai.configure(api_key=api_key)
 
 # Current model (will fix after we see available ones)
-gemini = genai.GenerativeModel("models/gemini-1.0-pro")
+gemini = genai.GenerativeModel("models/gemini-2.5-flash")
 
 app = FastAPI()
 
