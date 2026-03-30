@@ -1,13 +1,16 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
+from pathlib import Path
 import joblib, json, os
 import pandas as pd
 import google.generativeai as genai
 
-model = joblib.load("model.pkl")
+BASE_DIR = Path(__file__).parent
 
-with open("features.json") as f:
+model = joblib.load(BASE_DIR / "model.pkl")
+
+with open(BASE_DIR / "features.json") as f:
     features = json.load(f)
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -52,7 +55,7 @@ def classify(esi):
 
 @app.get("/", response_class=HTMLResponse)
 def index():
-    return open("index.html").read()
+    return (BASE_DIR / "index.html").read_text()
 
 if __name__ == "__main__":
     import uvicorn
