@@ -53,3 +53,7 @@ def classify(esi):
 @app.get("/", response_class=HTMLResponse)
 def index():
     return open("index.html").read()
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=10000)
