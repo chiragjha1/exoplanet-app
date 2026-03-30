@@ -28,7 +28,7 @@ print("GEMINI_API_KEY loaded:", "YES" if api_key else "NO")
 genai.configure(api_key=api_key)
 
 # Use safer model name format
-gemini = genai.GenerativeModel("models/gemini-1.5-flash")
+gemini = genai.GenerativeModel("models/gemini-1.0-pro")
 
 # Optional: list available models (uncomment for debugging)
 """
